@@ -9,7 +9,8 @@ $$y_{k+1}=Ay_{k}+B w_k.$$
 
 Since these are nonlinear maps, we also need to find their inverse mappings, $x=\phi^{-1}(y)$ and $u=\psi^{-1}(y,w)$.
 
-We aim to use deep-neural networks to approximate these functions. Motivated by the autoencoders, we use the follwoing network
+We aim to use deep-neural networks to approximate these functions. Motivated by the autoencoders, we use the following network
+
 <img src="https://github.com/asokraju/SurrogateModel/blob/e8876c9a2e79792d6a2da7ea15e952a0848a014d/tools/nn.PNG" width="400" align="center">
 
 The objective is to minimize the following loss:
@@ -22,6 +23,7 @@ where $\hat{\psi}$ represents the approximated function of $\psi$. Note that the
 
 
 Used  tensorflow subclassing to model and train the neural network. Below represents the neural network snap-shot.
+
 <img src="https://github.com/asokraju/SurrogateModel/blob/7e983e5db480da07a210fac92aec8a233fd32ac6/tools/index.png" width="400" align="right">
 
 
