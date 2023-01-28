@@ -3,7 +3,7 @@ Developing Surrogate models for Physics based systems with improved accuracy whi
 
 Problem formulation:
 Consider the following system
-$$ x_{k+1}= f(x_k, u_k) $$
+$$x_{k+1}=f(x_k, u_k)$$
 Final suitable mappings $y=\phi(x)$ and $w=\psi(x,u)$ such that the above system can be represented as Linear Time-Invariant system (LTI):
 $$y_{k+1}=Ay_{k}+B w_k.$$
 
