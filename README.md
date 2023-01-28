@@ -16,8 +16,9 @@ The objective is to minimize the following loss:
 $$L(x_k, u_k, x_{k+1}) = \|x_{k+1}-\hat x_{k+1}\|_2^2 + \|u_k-\hat{u}_k\|_2^2$$
 which can be simplifed to as
 
-$$L(x_k, u_k, x_{k+1})=\|x_{k+1}-\hat{\phi}^{-1}\left(A\hat{\phi}(x_k) + B \hat{\psi}(x_k, u_k)\right)\|_2^2 + \|u_k-\hat \psi^{-1}(\hat \phi(x_k),\hat \psi(x_k,u_k))\|_2^2$$
-where $\hat{\psi}$ represents the approximated function of $\psi$. Note that the  loss function only needs current state ($x_k$), action ($u_k$) and the next state ($x_{k+1}$.
+$$L(x_k, u_k, x_{k+1})=\|x_{k+1}-\hat{\phi}^{-1}\left(A\hat{\phi}(x_k)+B\hat{\psi}(x_k, u_k)\right)\|_2^2 + \|u_k-\hat \psi^{-1}(\hat \phi(x_k),\hat \psi(x_k,u_k))\|_2^2$$
+
+where $\hat{\psi}$ represents the approximated function of $\psi$. Note that the  loss function only needs current state ($x_k$), action ($u_k$) and the next state ($x_{k+1}$).
 
 
 Used  tensorflow subclassing to model and train the neural network. Below represents the neural network snap-shot.
