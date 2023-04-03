@@ -130,6 +130,7 @@ class VAE(keras.Model):
             name="prediction_loss"
         )
         self.kl_loss_tracker = keras.metrics.Mean(name="kl_loss")
+        self.prediction_loss_tracker = keras.metrics.Mean(name="prediction_loss")
 
     @property
     def metrics(self):
