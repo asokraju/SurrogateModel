@@ -9,7 +9,6 @@ import numpy as np
 from functools import reduce
 
 
-
 # Sampling layer
 class Sampling(layers.Layer):
     "used to sample a vector in latent space with learned mean - z_mean and (log) variance - z_log_var"
@@ -122,10 +121,11 @@ def linear_system(latent, u_dim):
     return Model(inputs=[Ay.input, Bw.input], outputs= Ay.output + Bw.output)
 
 class KoopMan(keras.Model):
-    def __init__(self, encoder, decoder, lin_sys, x_dim, u_dim, **kwargs):
+    def __init__(self, encoder, decoder, lin_sys, x_dim, u_dim, alpha = 0.5, **kwargs):
         super().__init__(**kwargs)
         self.x_dim = x_dim
         self.u_dim = u_dim
+        self.alpha = alpha
         self.encoder = encoder
         self.decoder = decoder
         self.lin_sys = lin_sys
@@ -170,7 +170,7 @@ class KoopMan(keras.Model):
             kl_loss = -0.5 * (1 + y_log_var - tf.square(y_mean) - tf.exp(y_log_var))
             kl_loss = tf.reduce_mean(tf.reduce_sum(kl_loss, axis=1))
             
-            total_loss = reconstruction_loss_state + kl_loss + prediction_loss_state
+            total_loss = (1-self.alpha)*(reconstruction_loss_state + kl_loss) + self.alpha * prediction_loss_state
         grads = tape.gradient(total_loss, self.trainable_weights)
         self.optimizer.apply_gradients(zip(grads, self.trainable_weights))
         self.total_loss_tracker.update_state(total_loss)

@@ -5,9 +5,10 @@ from tensorflow.keras import Model
 from tensorflow.keras.optimizers import RMSprop
 from keras.utils.vis_utils import plot_model
 
-
+from datetime import datetime
 import numpy as np
 import pandas as pd
+from functools import reduce
 # from sklearn.preprocessing import StandardScaler
 # import matplotlib.pyplot as plt
 # import gym
@@ -67,19 +68,20 @@ def data_gen(X_train, U_train, k):
 if __name__ == '__main__':
     INPUT_SHAPE = 4
     OUTPUT_SHAPE = 4
-    DENSE_LAYERS = [4, 16, 32, 64]
-    LATENT_DIM = 8
+    DENSE_LAYERS = [4, 16, 32, 64, 128, 256]
+    LATENT_DIM = 256
     X_DIM = 4
     U_DIM = 2
 
-    BATCH_SIZE = 100
+    BATCH_SIZE = 1000
     AUTOTUNE = tf.data.AUTOTUNE
-    LEARNING_RATE = 1e-4
+    LEARNING_RATE = 2e-4
     PATIENCE = 10
-    EPOCHS  = 50
+    EPOCHS  = 50000
     TRAIN_SPLIT = 0.99
     K = 1
-    LOGDIR = 'logdir/'
+    LOGDIR = LOGDIR = os.path.join(r"C:\Users\kkosara\SurrogateModel\logdir", datetime.now().strftime("%Y%m%d-%H%M%S"))
+
 
     U_train = np.load('U_train.npy', mmap_mode=None, allow_pickle=True, fix_imports=True)
     X_train = np.load('X_train.npy', mmap_mode=None, allow_pickle=True, fix_imports=True)    
@@ -89,7 +91,7 @@ if __name__ == '__main__':
 
 
     dataset = tf.data.Dataset.from_tensor_slices(data)
-    dataset = dataset.shuffle(buffer_size=100, seed=42, reshuffle_each_iteration=False)
+    dataset = dataset.shuffle(buffer_size=100, seed=42, reshuffle_each_iteration=True)
 
     # Split the dataset into training and validation sets
     train_dataset = dataset.take(int(TRAIN_SPLIT * data_count))
@@ -114,8 +116,8 @@ if __name__ == '__main__':
     koopman = KoopMan(encoder, decoder, lin_sys, X_DIM, U_DIM)
     koopman.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=LEARNING_RATE))
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=LOGDIR)
-    history = koopman.fit(train_dataset, epochs=1000, callbacks=[tensorboard_callback])
-
+    history = koopman.fit(train_dataset, epochs=EPOCHS, callbacks=[tensorboard_callback])
+    koopman.save('k')
     # # LossFunc    =     {'output_1':'mse', 'output_2':'mse', 'output_2':'mse', 'output_2':'mse', 'output_2':'mse'}
     # # lossWeights =     {'output_1':0.5, 'output_2':0.5}
     # autoencoder.compile(optimizer=RMSprop(learning_rate=0.0001), loss='huber')#, loss=LossFunc, loss_weights=lossWeights
